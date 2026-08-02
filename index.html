@@ -9,7 +9,7 @@
 <style>
   :root{
     --navy:#0A2E3F; --teal:#136B77; --cyan:#3FBFB0; --red:#D64545;
-    --sand:#F3EFE4; --foam:#FFFFFF; --ink:#152225; --ink-soft:#4B5B60;
+    --sand:#F3EFE4; --foam:#FFFFFF; --ink:#152225; --ink-soft:#3A4A50;
     --line:#DAD3C2; --row-alt:#FAF8F2;
     --display:'Arial Black', Arial, Helvetica, sans-serif;
     --body:Arial, Helvetica, sans-serif;
@@ -22,8 +22,8 @@
 
   .hero{background:radial-gradient(1100px 500px at 15% -10%, #114C5E 0%, var(--navy) 55%, #062029 100%);
     color:var(--foam);padding:28px 20px;border-radius:14px;}
-  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;
-    color:var(--foam);margin-bottom:10px;display:block;}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--foam);margin-bottom:10px;display:block;}
   h1{font-family:var(--display);text-transform:uppercase;letter-spacing:0.01em;color:var(--foam);
     font-size:26px;line-height:1.1;font-weight:800;margin:0;}
   .hero p{max-width:640px;margin:12px 0 0;font-size:15px;color:#CBDDE1;line-height:1.55;}
@@ -33,20 +33,20 @@
   h2{font-family:var(--display);text-transform:uppercase;letter-spacing:0.02em;color:var(--navy);
     margin:0 0 12px;font-size:19px;}
   h3{font-family:var(--display);text-transform:uppercase;letter-spacing:0.01em;color:var(--navy);
-    font-size:15px;margin:20px 0 8px;}
+    font-size:15px;margin:22px 0 8px;}
   .card{background:var(--foam);border:1px solid var(--line);border-radius:12px;padding:18px;
     margin:0 0 16px;}
   p.copy{font-size:15px;line-height:1.6;margin:0 0 12px;}
   p.copy:last-child{margin-bottom:0;}
 
-  .lbl{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;
+  .lbl{display:block;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:0.1em;
     text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px;}
   .picker{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px;}
-  .picker button{flex:1 1 0;min-width:88px;min-height:48px;cursor:pointer;font-family:var(--display);
-    font-size:14px;text-transform:uppercase;letter-spacing:0.02em;padding:12px 6px;border-radius:10px;
+  .picker button{flex:1 1 28%;min-width:84px;min-height:48px;cursor:pointer;font-family:var(--display);
+    font-size:14px;text-transform:uppercase;letter-spacing:0.02em;padding:12px 4px;border-radius:10px;
     border:1px solid var(--line);background:var(--foam);color:var(--navy);}
-  .picker.four button{flex:1 1 44%;}
   .picker button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--foam);}
+  .picker button[disabled]{opacity:0.4;cursor:not-allowed;}
 
   .timebox{display:flex;align-items:center;gap:8px;}
   .timebox .fld{flex:1;min-width:0;}
@@ -57,8 +57,8 @@
   input::placeholder{color:#6E6A5E;font-weight:400;}
   input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--cyan);outline-offset:2px;}
   .sublbl{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:0.08em;
-    text-transform:uppercase;color:#3A4A50;text-align:center;margin:7px 0 0;}
-  .hint{font-size:14px;color:#3A4A50;margin:14px 0 0;line-height:1.6;}
+    text-transform:uppercase;color:var(--ink-soft);text-align:center;margin:7px 0 0;}
+  .hint{font-size:14px;color:var(--ink-soft);margin:14px 0 0;line-height:1.6;}
   .ghost{width:100%;margin-top:14px;min-height:48px;cursor:pointer;font-family:var(--body);
     font-size:14px;font-weight:700;color:var(--teal);background:none;border:1px solid var(--line);
     border-radius:10px;padding:12px;}
@@ -71,15 +71,14 @@
     border-radius:10px;padding:14px;}
   .tile.pb{background:var(--navy);border-color:var(--navy);}
   .tile .k{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:0.08em;
-    text-transform:uppercase;color:#3A4A50;margin-bottom:6px;}
+    text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
   .tile.pb .k{color:var(--foam);}
   .tile .v{font-family:var(--display);font-size:19px;color:var(--navy);line-height:1.2;
     word-break:break-word;}
   .tile.pb .v{color:var(--foam);}
-  .tile .sub{font-size:12.5px;color:#3A4A50;margin-top:5px;}
+  .tile .sub{font-size:12.5px;color:var(--ink-soft);margin-top:5px;}
   .tile.pb .sub{color:#B9CCD0;}
 
-  /* Data lists: real table on wide screens, stacked cards on phones */
   .dl{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:10px;
     overflow:hidden;background:var(--foam);}
   .dl li{border-top:1px solid var(--line);padding:14px 16px;}
@@ -89,33 +88,62 @@
     letter-spacing:0.02em;margin-bottom:8px;}
   .dl .pair{display:flex;justify-content:space-between;gap:12px;padding:4px 0;align-items:baseline;}
   .dl .pk{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.06em;
-    text-transform:uppercase;color:#3A4A50;flex:none;}
+    text-transform:uppercase;color:var(--ink-soft);flex:none;}
   .dl .pv{font-family:var(--mono);font-size:15.5px;font-weight:700;color:var(--navy);text-align:right;
     word-break:break-word;line-height:1.45;}
+
+  /* versatility rows */
+  .vrow{border-top:1px solid var(--line);padding:14px 16px;}
+  .vrow:first-child{border-top:0;}
+  .vrow:nth-child(even){background:var(--row-alt);}
+  .vhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px;}
+  .vdist{font-family:var(--display);text-transform:uppercase;font-size:14px;color:var(--navy);}
+  .vgoal{font-family:var(--mono);font-size:14.5px;font-weight:700;color:var(--navy);}
+  .vin{display:flex;align-items:center;gap:6px;}
+  .vin input{font-size:16px;min-height:44px;padding:8px 4px;}
+  .vin .colon{font-family:var(--display);font-size:16px;color:var(--navy);}
+  .vin .cap{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--ink-soft);
+    text-transform:uppercase;flex:none;width:52px;}
+  .verdict{margin-top:10px;font-size:13.5px;line-height:1.5;display:none;}
+  .verdict.on{display:block;}
+  .badge{display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:700;
+    letter-spacing:0.06em;text-transform:uppercase;padding:4px 9px;border-radius:5px;
+    margin-right:8px;color:var(--foam);}
+  .b-ahead{background:var(--teal);} .b-phase{background:var(--navy);}
+  .b-season{background:#7A5C1E;} .b-long{background:#5A5A5A;}
 
   .note{border-left:4px solid var(--cyan);background:#EFFAF8;border-radius:0 10px 10px 0;
     padding:14px 16px;margin:16px 0 0;font-size:14px;line-height:1.6;}
   .note.warn{border-left-color:var(--red);background:#FBEEEE;}
+  .step{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--line);}
+  .step:first-of-type{border-top:0;padding-top:0;}
+  .stepnum{flex:none;font-family:var(--mono);font-weight:700;font-size:15px;width:32px;height:32px;
+    border-radius:50%;background:var(--teal);color:var(--foam);display:flex;align-items:center;
+    justify-content:center;}
+  .step h3{margin:0 0 6px;font-size:14px;}
+  .step p{margin:0;font-size:14.5px;line-height:1.6;}
   .foot{font-size:12.5px;color:var(--ink-soft);text-align:center;padding:6px 0 20px;line-height:1.6;}
 
   @media (min-width:700px){
     .wrap{padding:24px;}
-    .hero{padding:44px 32px;} h1{font-size:34px;} .hero p{font-size:16px;}
-    .eyebrow{font-size:13px;}
+    .hero{padding:44px 32px;} h1{font-size:34px;} .hero p{font-size:16px;} .eyebrow{font-size:13px;}
     .card{padding:24px 26px;margin-bottom:22px;} h2{font-size:24px;}
-    .picker.four button{flex:1 1 0;}
+    .picker button{flex:1 1 0;}
     .timebox{max-width:420px;}
     .tile{flex:1 1 0;min-width:150px;} .tile .v{font-size:22px;}
     .ghost{width:auto;margin-top:16px;}
-    .dl li{padding:0;background:none !important;border:0;}
-    .dl{display:table;width:100%;border-collapse:collapse;border-radius:10px;}
-    .dl li{display:table-row;}
+    .dl{display:table;width:100%;border-collapse:collapse;}
+    .dl li{display:table-row;padding:0;background:none !important;border:0;}
     .dl .rowhead,.dl .pair{display:table-cell;padding:12px;border-top:1px solid var(--line);
       vertical-align:middle;}
     .dl li:nth-child(even) .rowhead,.dl li:nth-child(even) .pair{background:var(--row-alt);}
     .dl .pk{display:none;}
     .dl .pv{text-align:left;font-size:15px;white-space:nowrap;}
     .dl .rowhead{margin:0;font-size:14.5px;}
+    .vrow{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+    .vhead{margin:0;flex:1 1 220px;}
+    .vin{flex:0 0 190px;}
+    .verdict{margin:0;flex:1 1 100%;}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
 </style>
@@ -126,7 +154,7 @@
   <div class="hero">
     <span class="eyebrow">ROW Swim Club</span>
     <h1>ROW Swimming Math</h1>
-    <p>Enter one best time. Get a goal time for every other distance, the splits to swim it, and the math behind every number.</p>
+    <p>Enter one best time. Get a goal time for every other distance, the splits to swim it, and a plan for which goal to chase first.</p>
   </div>
 
   <div class="lanes">
@@ -144,15 +172,19 @@
       <button type="button" data-dist="50" aria-pressed="true">50 m</button>
       <button type="button" data-dist="100" aria-pressed="false">100 m</button>
       <button type="button" data-dist="200" aria-pressed="false">200 m</button>
+      <button type="button" data-dist="400" aria-pressed="false">400 m</button>
+      <button type="button" data-dist="800" aria-pressed="false">800 m</button>
+      <button type="button" data-dist="1500" aria-pressed="false">1500 m</button>
     </div>
 
     <span class="lbl" id="stroke-label">Which stroke?</span>
-    <div class="picker four" role="group" aria-labelledby="stroke-label">
+    <div class="picker" role="group" aria-labelledby="stroke-label">
       <button type="button" data-stroke="fr" aria-pressed="true">Free</button>
       <button type="button" data-stroke="bk" aria-pressed="false">Back</button>
       <button type="button" data-stroke="br" aria-pressed="false">Breast</button>
       <button type="button" data-stroke="fl" aria-pressed="false">Fly</button>
     </div>
+    <p class="hint" id="stroke-note" style="margin:-12px 0 20px;"></p>
 
     <span class="lbl">Your personal best <span id="pb-dist">(50 m free)</span></span>
     <div class="timebox">
@@ -182,25 +214,52 @@
     </div>
 
     <div class="card">
-      <h2>Your split targets</h2>
-      <p class="copy" id="drop-note"></p>
+      <h2>Your target splits</h2>
+      <p class="copy"><strong>Aim for the same time on every 50.</strong> That is the whole plan. In a 400 or longer, bring the last 50 home about a second faster than the rest.</p>
       <ul class="dl" id="splits"></ul>
-      <div class="note"><strong>The drop-off is a ceiling, not a target.</strong> Even splits are the ideal. These show the most you can fade and still hit your goal. Go out faster than the opening range and you have to fade more than the standard allows.</div>
+      <p class="hint">Rounded to a tenth, so they may add up a few tenths either side of your goal. Swim the numbers, not the total. Target splits are the same in every stroke, because an even split is an even split.</p>
+      <h3>The guardrail: your drop-off</h3>
+      <p class="copy" id="drop-note"></p>
+      <p class="hint" style="margin-top:0;">Check it once, after the race. Inside the number, you paced it well even if you missed the target. Outside it, you went out too fast.</p>
+      <div class="note warn">Going out faster than your target 50 is the most common mistake in a race. It feels good for one length and costs you the back half. Practise the target pace until it feels slow.</div>
+    </div>
+
+    <div class="card">
+      <h2>How to approach your goals</h2>
+
+      <div class="step">
+        <span class="stepnum">1</span>
+        <div>
+          <h3>Are you versatile?</h3>
+          <p>Add any other best times you have below. If one event is already faster than its goal, that event is your real strength and the whole ladder should be rebuilt from it. Big gaps in one direction tell you what to train.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="stepnum">2</span>
+        <div>
+          <h3>Pick your next-phase goals</h3>
+          <p>Chase what is close. Anything within about 2% of your current time is reachable in one training block. Pick one or two, not six.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="stepnum">3</span>
+        <div>
+          <h3>Set one stretch goal</h3>
+          <p>Something within about 5% is a season target. Further out than that is a longer project, and it is fine to name it, but do not judge your season on it.</p>
+        </div>
+      </div>
+
+      <h3>Add your other best times</h3>
+      <p class="copy" style="font-size:14px;color:var(--ink-soft);">Optional. Leave blank any event you have not raced.</p>
+      <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden;" id="versatility"></div>
+      <div class="note warn" id="anchor-note" style="display:none;"></div>
+      <div class="note">The 2% and 5% bands are a starting point for the conversation, not a rule. Your coach knows your training, your stroke and your race plan, and their target wins.</div>
     </div>
 
     <div class="card">
       <h2>Show the math</h2>
       <ul class="dl" id="math"></ul>
-      <div class="note" id="anchor-note"></div>
-    </div>
-
-    <div class="card">
-      <h2>How to use this</h2>
-      <h3 style="margin-top:0;">If you are already faster than a goal</h3>
-      <p class="copy">That event is ahead of the rest of your range. Enter that faster time instead and rebuild the ladder from there.</p>
-      <h3>If a goal feels far away</h3>
-      <p class="copy">Look at the gap, not the number. A 200 goal that is 6 seconds away is a season target. One that is 25 seconds away is a two season target.</p>
-      <div class="note warn">Keep one course. Use a short course best time for short course goals and a long course best time for long course goals. Do not mix them. Bring your ladder to your coach before you set a season target.</div>
+      <div class="note" id="chain-note"></div>
     </div>
 
   </div>
@@ -212,213 +271,260 @@
 (function(){
   var best = 50, stroke = 'fr';
   var KICK = 1.0;
+  var DISTS = [50,100,200,400,800,1500];
   var STROKES = {
-    fr:{name:'freestyle', short:'Free', d100:2, d200:3},
-    bk:{name:'backstroke', short:'Back', d100:2, d200:3},
-    br:{name:'breaststroke', short:'Breast', d100:4, d200:4},
-    fl:{name:'butterfly', short:'Fly', d100:4, d200:4}
+    fr:{name:'freestyle', short:'free', d100:2, d200:3},
+    bk:{name:'backstroke', short:'back', d100:2, d200:3},
+    br:{name:'breaststroke', short:'breast', d100:4, d200:4},
+    fl:{name:'butterfly', short:'fly', d100:4, d200:4}
   };
-  var PH = {50:{m:'0', s:'30.00'}, 100:{m:'1', s:'05.00'}, 200:{m:'2', s:'20.00'}};
+  var PH = {50:{m:'0',s:'30.00'}, 100:{m:'1',s:'05.00'}, 200:{m:'2',s:'20.00'},
+            400:{m:'4',s:'52.50'}, 800:{m:'10',s:'02.50'}, 1500:{m:'19',s:'30.00'}};
 
-  var minsEl = document.getElementById('mins');
-  var secsEl = document.getElementById('secs');
-  var errEl = document.getElementById('err');
-  var resultsEl = document.getElementById('results');
-  var tilesEl = document.getElementById('tiles');
-  var splitsEl = document.getElementById('splits');
-  var mathEl = document.getElementById('math');
-  var noteEl = document.getElementById('anchor-note');
-  var dropEl = document.getElementById('drop-note');
-  var ladderEl = document.getElementById('ladder-note');
-  var pbDistEl = document.getElementById('pb-dist');
-  var distBtns = document.querySelectorAll('.picker button[data-dist]');
-  var strokeBtns = document.querySelectorAll('.picker button[data-stroke]');
+  var minsEl=document.getElementById('mins'), secsEl=document.getElementById('secs');
+  var errEl=document.getElementById('err'), resultsEl=document.getElementById('results');
+  var tilesEl=document.getElementById('tiles'), splitsEl=document.getElementById('splits');
+  var mathEl=document.getElementById('math'), chainEl=document.getElementById('chain-note');
+  var dropEl=document.getElementById('drop-note'), ladderEl=document.getElementById('ladder-note');
+  var pbDistEl=document.getElementById('pb-dist'), strokeNoteEl=document.getElementById('stroke-note');
+  var versEl=document.getElementById('versatility'), anchorEl=document.getElementById('anchor-note');
+  var distBtns=document.querySelectorAll('.picker button[data-dist]');
+  var strokeBtns=document.querySelectorAll('.picker button[data-stroke]');
+  var actuals = {};
 
   function fmt(t){
+    if(t < 60) return t.toFixed(1);
+    var m=Math.floor(t/60), s=t-m*60;
+    return m + ':' + (s<10?'0':'') + s.toFixed(1);
+  }
+  function fmtPB(t){
     if(t < 60) return t.toFixed(2);
-    var m = Math.floor(t/60), s = t - m*60;
-    return m + ':' + (s < 10 ? '0' : '') + s.toFixed(2);
+    var m=Math.floor(t/60), s=t-m*60;
+    return m + ':' + (s<10?'0':'') + s.toFixed(2);
+  }
+  function rng(a){ return a[0]===a[1] ? fmt(a[0]) : fmt(a[0]) + ' to ' + fmt(a[1]); }
+
+  function readPair(mEl, sEl){
+    var mR=mEl.value.trim(), sR=sEl.value.trim();
+    if(!mR && !sR) return null;
+    if(mR && !/^\d{1,2}$/.test(mR)) return NaN;
+    if(!sR || !/^\d{1,2}(\.\d{1,2})?$/.test(sR)) return NaN;
+    var s=parseFloat(sR); if(s>=60) return NaN;
+    var t=(mR?parseInt(mR,10):0)*60 + s;
+    return t>0 ? t : NaN;
   }
 
-  function readTime(){
-    var mRaw = minsEl.value.trim(), sRaw = secsEl.value.trim();
-    if(!mRaw && !sRaw) return null;
-    if(mRaw && !/^\d{1,2}$/.test(mRaw)) return NaN;
-    if(!sRaw || !/^\d{1,2}(\.\d{1,2})?$/.test(sRaw)) return NaN;
-    var m = mRaw ? parseInt(mRaw, 10) : 0;
-    var s = parseFloat(sRaw);
-    if(s >= 60) return NaN;
-    var total = m*60 + s;
-    return total > 0 ? total : NaN;
-  }
-
+  // Forward add-ons are ranges. Reversing uses the midpoint, which round-trips exactly.
   function ladder(pb){
-    var g50, g100, g200, w = {};
-    if(best === 50){
-      g50 = pb;
-      g100 = pb*2 + 5;    w[100] = fmt(pb) + ' x 2 + 5';
-      g200 = g100*2 + 10; w[200] = fmt(g100) + ' x 2 + 10';
-    } else if(best === 100){
-      g100 = pb;
-      g50 = (pb - 5)/2;   w[50]  = '(' + fmt(pb) + ' - 5) / 2';
-      g200 = pb*2 + 10;   w[200] = fmt(pb) + ' x 2 + 10';
+    var g50,g100,g200,g400,g800,g1500,w={};
+    function down200(v){ g100=(v-10)/2; w[100]='('+fmt(v)+' - 10) / 2';
+                         g50=(g100-5)/2; w[50]='('+fmt(g100)+' - 5) / 2'; }
+    if(best===50){
+      g50=pb; g100=pb*2+5; w[100]=fmtPB(pb)+' x 2 + 5';
+      g200=g100*2+10; w[200]=fmt(g100)+' x 2 + 10';
+    } else if(best===100){
+      g100=pb; g50=(pb-5)/2; w[50]='('+fmtPB(pb)+' - 5) / 2';
+      g200=pb*2+10; w[200]=fmtPB(pb)+' x 2 + 10';
+    } else if(best===200){
+      g200=pb; down200(pb); w[100]='('+fmtPB(pb)+' - 10) / 2';
+    } else if(best===400){
+      g200=(pb-12.5)/2; w[200]='('+fmtPB(pb)+' - 12.5) / 2'; down200(g200);
+    } else if(best===800){
+      var b4=(pb-17.5)/2; w[400]='('+fmtPB(pb)+' - 17.5) / 2';
+      g200=(b4-12.5)/2; w[200]='('+fmt(b4)+' - 12.5) / 2'; down200(g200);
+      g400=[b4,b4];
     } else {
-      g200 = pb;
-      g100 = (pb - 10)/2; w[100] = '(' + fmt(pb) + ' - 10) / 2';
-      g50 = (g100 - 5)/2; w[50]  = '(' + fmt(g100) + ' - 5) / 2';
+      var c4=pb/4; w[400]=fmtPB(pb)+' / 4';
+      g200=(c4-12.5)/2; w[200]='('+fmt(c4)+' - 12.5) / 2'; down200(g200);
+      g400=[c4,c4];
     }
-    var g400 = [g200*2 + 10, g200*2 + 15];
-    var g800 = [g400[0]*2 + 15, g400[1]*2 + 20];
-    var g1500 = [g400[0]*4, g400[1]*4];
-    w[400] = fmt(g200) + ' x 2 + 10 to 15';
-    w[800] = fmt(g400[0]) + ' x 2 + 15 to 20';
-    w[1500] = fmt(g400[0]) + ' x 4';
-    return {g50:g50, g100:g100, g200:g200, g400:g400, g800:g800, g1500:g1500, w:w};
+    if(!g400){
+      if(best===400){ g400=[pb,pb]; w[400]='Your best time'; }
+      else { g400=[g200*2+10, g200*2+15]; w[400]=fmt(g200)+' x 2 + 10 to 15'; }
+    }
+    if(best===800){ g800=[pb,pb]; w[800]='Your best time'; }
+    else { g800=[g400[0]*2+15, g400[1]*2+20]; w[800]=fmt(g400[0])+' x 2 + 15 to 20'; }
+    if(best===1500){ g1500=[pb,pb]; w[1500]='Your best time'; }
+    else { g1500=[g400[0]*4, g400[1]*4]; w[1500]=fmt(g400[0])+' x 4'; }
+    return {50:g50,100:g100,200:g200,400:g400,800:g800,1500:g1500,w:w};
   }
 
-  function rangeTxt(a){ return fmt(a[0]) + ' to ' + fmt(a[1]); }
+  function goalOf(r,d){ return d<=200 ? r[d] : r[d][0]; }
+
+  function band(actual, goal){
+    var gap = actual - goal;
+    if(gap <= 0) return {k:'b-ahead', t:'Ahead of the ladder',
+      d:'You are already faster than this goal. Rebuild the ladder from this event.'};
+    var pct = gap/goal*100;
+    if(pct <= 2) return {k:'b-phase', t:'Next phase',
+      d:fmt(gap)+' away, about '+pct.toFixed(1)+'%. Reachable in one training block.'};
+    if(pct <= 5) return {k:'b-season', t:'This season',
+      d:fmt(gap)+' away, about '+pct.toFixed(1)+'%. A season target.'};
+    return {k:'b-long', t:'Longer term',
+      d:fmt(gap)+' away, about '+pct.toFixed(1)+'%. Name it, but judge the season on something closer.'};
+  }
 
   function row(head, pairs){
-    var li = document.createElement('li');
-    var html = '<div class="rowhead">' + head + '</div>';
+    var li=document.createElement('li');
+    var h='<div class="rowhead">'+head+'</div>';
     pairs.forEach(function(p){
-      html += '<div class="pair"><span class="pk">' + p[0] + '</span>' +
-              '<span class="pv">' + p[1] + '</span></div>';
+      h+='<div class="pair"><span class="pk">'+p[0]+'</span><span class="pv">'+p[1]+'</span></div>';
     });
-    li.innerHTML = html;
-    return li;
+    li.innerHTML=h; return li;
+  }
+
+  function buildVersatility(r){
+    versEl.innerHTML='';
+    DISTS.forEach(function(d){
+      if(d>200 && stroke!=='fr') return;
+      var goal = goalOf(r,d);
+      var div=document.createElement('div');
+      div.className='vrow';
+      div.innerHTML =
+        '<div class="vhead"><span class="vdist">'+d+' m</span>'+
+        '<span class="vgoal">Goal '+(d<=200?fmt(goal):rng(r[d]))+'</span></div>'+
+        '<div class="vin"><span class="cap">My PB</span>'+
+        '<input type="text" inputmode="numeric" maxlength="2" placeholder="0" aria-label="'+d+' minutes">'+
+        '<span class="colon">:</span>'+
+        '<input type="text" inputmode="decimal" maxlength="5" placeholder="00.00" aria-label="'+d+' seconds">'+
+        '</div><div class="verdict"></div>';
+      var ins=div.querySelectorAll('input'), vEl=div.querySelector('.verdict');
+      if(d===best){ ins[0].value=minsEl.value; ins[1].value=secsEl.value; }
+      function check(){
+        var t=readPair(ins[0],ins[1]);
+        if(t===null || isNaN(t)){ vEl.className='verdict'; delete actuals[d]; updateAnchor(r); return; }
+        actuals[d]=t;
+        var b=band(t,goal);
+        vEl.className='verdict on';
+        vEl.innerHTML='<span class="badge '+b.k+'">'+b.t+'</span>'+b.d;
+        updateAnchor(r);
+      }
+      ins[0].addEventListener('input',check); ins[1].addEventListener('input',check);
+      versEl.appendChild(div);
+      if(d===best) check();
+    });
+    updateAnchor(r);
+  }
+
+  function updateAnchor(r){
+    var ahead=[];
+    Object.keys(actuals).forEach(function(k){
+      var d=parseInt(k,10);
+      if(actuals[d] < goalOf(r,d) - 0.005 && d!==best) ahead.push(d);
+    });
+    if(!ahead.length){ anchorEl.style.display='none'; return; }
+    anchorEl.style.display='block';
+    anchorEl.innerHTML='<strong>Your '+ahead.join(' and ')+' is ahead of the ladder.</strong> '+
+      'That means your '+best+' is not your strongest event after all. Enter your '+ahead[0]+
+      ' as your best time instead and the whole ladder shifts. This is what an unbalanced range '+
+      'looks like, and it tells you exactly where to train.';
   }
 
   function render(pb){
-    var r = ladder(pb), st = STROKES[stroke];
-    var cap = st.name.charAt(0).toUpperCase() + st.name.slice(1);
+    var r=ladder(pb), st=STROKES[stroke];
+    var cap=st.name.charAt(0).toUpperCase()+st.name.slice(1);
 
-    var items = [
-      {d:50,   v:fmt(r.g50),        sub:cap},
-      {d:100,  v:fmt(r.g100),       sub:cap},
-      {d:200,  v:fmt(r.g200),       sub:cap},
-      {d:400,  v:rangeTxt(r.g400),  sub:'Freestyle'},
-      {d:800,  v:rangeTxt(r.g800),  sub:'Freestyle'},
-      {d:1500, v:rangeTxt(r.g1500), sub:'Freestyle'}
-    ];
-
-    tilesEl.innerHTML = '';
-    mathEl.innerHTML = '';
-    items.forEach(function(it){
-      var isPB = (it.d === best);
-      var tile = document.createElement('div');
-      tile.className = 'tile' + (isPB ? ' pb' : '');
-      tile.innerHTML = '<div class="k">' + (isPB ? 'Your ' + it.d : 'Goal ' + it.d) + '</div>' +
-                       '<div class="v">' + it.v + '</div>' +
-                       '<div class="sub">' + (isPB ? 'Starting point' : it.sub) + '</div>';
+    tilesEl.innerHTML=''; mathEl.innerHTML='';
+    DISTS.forEach(function(d){
+      var isPB=(d===best);
+      var v = d<=200 ? (isPB?fmtPB(r[d]):fmt(r[d])) : (isPB?fmtPB(r[d][0]):rng(r[d]));
+      var sub = d<=200 ? cap : 'Freestyle';
+      var tile=document.createElement('div');
+      tile.className='tile'+(isPB?' pb':'');
+      tile.innerHTML='<div class="k">'+(isPB?'Your '+d:'Goal '+d)+'</div>'+
+                     '<div class="v">'+v+'</div>'+
+                     '<div class="sub">'+(isPB?'Starting point':sub)+'</div>';
       tilesEl.appendChild(tile);
-      mathEl.appendChild(row(it.d + ' m', [
-        ['Goal', it.v],
-        ['Built from', isPB ? 'Your best time' : r.w[it.d]]
-      ]));
+      mathEl.appendChild(row(d+' m',[['Goal',v],['Built from', isPB?'Your best time':(r.w[d]||'')]]));
     });
 
-    var races = [
-      {race:'100 m', goal:r.g100, drop:st.d100, n:2,  kick:0},
-      {race:'200 m', goal:r.g200, drop:st.d200, n:4,  kick:0}
-    ];
-    if(stroke === 'fr'){
-      races.push({race:'400 m',  goal:r.g400[0],  drop:3, n:8,  kick:KICK});
-      races.push({race:'800 m',  goal:r.g800[0],  drop:3, n:16, kick:KICK});
-      races.push({race:'1500 m', goal:r.g1500[0], drop:3, n:30, kick:KICK});
+    var races=[{race:'100 m',goal:r[100],n:2,kick:0},
+               {race:'200 m',goal:r[200],n:4,kick:0}];
+    if(stroke==='fr'){
+      races.push({race:'400 m',goal:r[400][0],n:8,kick:KICK});
+      races.push({race:'800 m',goal:r[800][0],n:16,kick:KICK});
+      races.push({race:'1500 m',goal:r[1500][0],n:30,kick:KICK});
     }
-
-    splitsEl.innerHTML = '';
+    splitsEl.innerHTML='';
     races.forEach(function(x){
-      var first = (x.goal - (x.n - 1)*x.drop + x.kick) / x.n;
-      var held = first + x.drop;
-      var last = held - x.kick;
-      var even = x.goal / x.n;
-      var spread;
-      if(x.n === 2){ spread = fmt(first) + ' + ' + fmt(held); }
-      else if(x.kick){ spread = fmt(first) + ' + ' + fmt(held) + ' x ' + (x.n - 2) + ' + ' + fmt(last); }
-      else { spread = fmt(first) + ' + ' + fmt(held) + ' x ' + (x.n - 1); }
-      splitsEl.appendChild(row(x.race, [
-        ['Goal', fmt(x.goal)],
-        ['Widest splits', spread],
-        ['Open in', fmt(first) + ' to ' + fmt(even)]
-      ]));
+      // Even pace, with the closing kick taken off the final 50. Sums exactly to the goal.
+      var held=(x.goal + x.kick)/x.n, last=held - x.kick;
+      var txt = x.n===2 ? fmt(held)+' + '+fmt(held)
+        : (x.kick ? fmt(held)+' x '+(x.n-1)+' + '+fmt(last) : fmt(held)+' x '+x.n);
+      splitsEl.appendChild(row(x.race,[['Goal',fmt(x.goal)],['Target 50s',txt]]));
     });
 
-    dropEl.innerHTML = 'In ' + st.name + ', your first 50 to second 50 drop-off should be <strong>' +
-      st.d100.toFixed(1) + ' seconds or less in a 100</strong> and <strong>' + st.d200.toFixed(1) +
-      ' seconds or less in a 200 or longer</strong>. The drop happens once. After that you hold pace, ' +
-      'so every 50 that follows should look the same.' +
-      (stroke === 'fr'
-        ? ' In a 400 or longer, bring the last 50 home about a second faster than the ones before it.'
-        : ' The 400, 800 and 1500 are freestyle only, so they are not shown here.');
+    dropEl.innerHTML='Nobody splits perfectly even, and some slowing is normal. Your drop-off is '+
+      'how much slower your second 50 is than your first. In '+st.name+' keep it to <strong>'+
+      st.d100.toFixed(1)+' seconds or less in a 100</strong> and <strong>'+st.d200.toFixed(1)+
+      ' seconds or less in a 200 or longer</strong>.'+
+      (stroke==='fr' ? '' : ' The 400, 800 and 1500 are freestyle only, so they are not shown above.');
 
-    ladderEl.innerHTML = 'The 50, 100 and 200 goals are ' + st.name +
+    ladderEl.innerHTML='The 50, 100 and 200 goals are '+st.name+
       ' times. The math is the same in every stroke. Times of 400 and up are freestyle.';
 
-    noteEl.innerHTML = 'Every number above is built from your ' + best +
-      '. The ladder works in both directions, so a swimmer holding all of these times is the ' +
-      'same swimmer. Whichever gap is smallest is the event you are closest to owning.';
+    chainEl.innerHTML = best>=400
+      ? 'Working down from a distance event uses the middle of each add-on range, so the chain lands on single numbers. Run it back up and you return to the time you entered.'
+      : 'Every number is built from your '+best+'. The ladder works in both directions, so a swimmer holding all of these is the same swimmer.';
 
-    resultsEl.hidden = false;
+    buildVersatility(r);
+    resultsEl.hidden=false;
   }
 
-  function fail(msg){
-    errEl.className = 'err on';
-    errEl.textContent = msg;
-    resultsEl.hidden = true;
-  }
+  function fail(msg){ errEl.className='err on'; errEl.textContent=msg; resultsEl.hidden=true; }
 
   function update(){
-    var pb = readTime();
-    if(pb === null){ errEl.className = 'err'; resultsEl.hidden = true; return; }
-    if(isNaN(pb)){
-      return fail('That time did not read correctly. Put whole minutes on the left and seconds on the right, like 1 and 05.00. Seconds must be under 60.');
-    }
-    if(best === 50 && pb >= 120){
-      return fail('That looks long for a 50. Check the event you picked above, or re-enter the time.');
-    }
-    errEl.className = 'err';
-    render(pb);
+    var pb=readPair(minsEl,secsEl);
+    if(pb===null){ errEl.className='err'; resultsEl.hidden=true; return; }
+    if(isNaN(pb)) return fail('That time did not read correctly. Whole minutes on the left, seconds on the right, like 1 and 05.00. Seconds must be under 60.');
+    if(best===50 && pb>=120) return fail('That looks long for a 50. Check the event you picked, or re-enter the time.');
+    if(best>=800 && pb<180) return fail('That looks short for an '+best+'. Check the event you picked, or re-enter the time.');
+    errEl.className='err'; actuals={}; render(pb);
   }
 
-  function setLabel(){
-    pbDistEl.textContent = '(' + best + ' m ' + STROKES[stroke].short.toLowerCase() + ')';
-    minsEl.placeholder = PH[best].m;
-    secsEl.placeholder = PH[best].s;
+  function setLabels(){
+    var distance = best>=400;
+    strokeBtns.forEach(function(b){
+      var isFree = b.getAttribute('data-stroke')==='fr';
+      b.disabled = distance && !isFree;
+      b.setAttribute('aria-pressed', distance ? String(isFree) : b.getAttribute('aria-pressed'));
+    });
+    if(distance) stroke='fr';
+    strokeNoteEl.textContent = distance
+      ? 'The 400, 800 and 1500 are freestyle events, so stroke is fixed here.'
+      : '';
+    pbDistEl.textContent='('+best+' m '+STROKES[stroke].short+')';
+    minsEl.placeholder=PH[best].m; secsEl.placeholder=PH[best].s;
   }
 
   distBtns.forEach(function(b){
-    b.addEventListener('click', function(){
-      distBtns.forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+    b.addEventListener('click',function(){
+      distBtns.forEach(function(x){x.setAttribute('aria-pressed','false');});
       b.setAttribute('aria-pressed','true');
-      best = parseInt(b.getAttribute('data-dist'), 10);
-      setLabel(); update();
+      best=parseInt(b.getAttribute('data-dist'),10);
+      setLabels(); update();
     });
   });
-
   strokeBtns.forEach(function(b){
-    b.addEventListener('click', function(){
-      strokeBtns.forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+    b.addEventListener('click',function(){
+      if(b.disabled) return;
+      strokeBtns.forEach(function(x){x.setAttribute('aria-pressed','false');});
       b.setAttribute('aria-pressed','true');
-      stroke = b.getAttribute('data-stroke');
-      setLabel(); update();
+      stroke=b.getAttribute('data-stroke');
+      setLabels(); update();
     });
   });
+  minsEl.addEventListener('input',update);
+  secsEl.addEventListener('input',update);
 
-  minsEl.addEventListener('input', update);
-  secsEl.addEventListener('input', update);
-
-  document.getElementById('example').addEventListener('click', function(){
-    distBtns.forEach(function(x){ x.setAttribute('aria-pressed', x.getAttribute('data-dist') === '50' ? 'true':'false'); });
-    strokeBtns.forEach(function(x){ x.setAttribute('aria-pressed', x.getAttribute('data-stroke') === 'fr' ? 'true':'false'); });
-    best = 50; stroke = 'fr';
-    setLabel();
-    minsEl.value = ''; secsEl.value = '30.00';
-    update();
+  document.getElementById('example').addEventListener('click',function(){
+    distBtns.forEach(function(x){x.setAttribute('aria-pressed', x.getAttribute('data-dist')==='50'?'true':'false');});
+    strokeBtns.forEach(function(x){x.setAttribute('aria-pressed', x.getAttribute('data-stroke')==='fr'?'true':'false');});
+    best=50; stroke='fr'; setLabels();
+    minsEl.value=''; secsEl.value='30.00'; update();
   });
 
-  setLabel();
+  setLabels();
 })();
 </script>
 </body>
