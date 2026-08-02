@@ -1,8 +1,13 @@
-# ROW Swimming Math
+# Goal Setting Tool
 
 Goal time and race split calculator for ROW Swim Club swimmers and coaches.
 
-**Live site:** https://<username>.github.io/<repo>/
+**Note on the repo name.** This repo is `row-swimming-math`, from an earlier working title. The
+tool is called the **Goal Setting Tool** everywhere it faces a swimmer. Do not rename the repo:
+GitHub Pages serves from the repo name, so renaming would change the live URL and break every
+link on rowswimming.ca.
+
+**Live site:** https://row-gm.github.io/row-swimming-math/
 
 ## What this is
 
