@@ -215,10 +215,10 @@
 
     <div class="card">
       <h2>Your target splits</h2>
-      <p class="copy"><strong>Aim for the same time on every 50.</strong> That is the whole plan. In a 400 or longer, bring the last 50 home about a second faster than the rest.</p>
+      <p class="copy"><strong>Your first 50 is always the fastest.</strong> You dive in and you are fresh, so it comes for free. After that, hold the same time on every 50. In a 400 or longer, bring the last 50 home about a second faster.</p>
       <ul class="dl" id="splits"></ul>
-      <p class="hint">Rounded to a tenth, so they may add up a few tenths either side of your goal. Swim the numbers, not the total. Target splits are the same in every stroke, because an even split is an even split.</p>
-      <h3>The guardrail: your drop-off</h3>
+      <p class="hint">Rounded to a tenth, so they may add up a few tenths either side of your goal. Swim the numbers, not the total.</p>
+      <h3>The drop-off, checked after the race</h3>
       <p class="copy" id="drop-note"></p>
       <p class="hint" style="margin-top:0;">Check it once, after the race. Inside the number, you paced it well even if you missed the target. Outside it, you went out too fast.</p>
       <div class="note warn">Going out faster than your target 50 is the most common mistake in a race. It feels good for one length and costs you the back half. Practise the target pace until it feels slow.</div>
@@ -262,6 +262,12 @@
       <div class="note" id="chain-note"></div>
     </div>
 
+  </div>
+
+  <div class="card" style="margin-top:4px;">
+      <h2>Coming soon: the medley</h2>
+      <p class="copy">This tool covers one stroke at a time. The <strong>200 IM</strong> and <strong>400 IM</strong> work differently, because your time depends on all four strokes rather than one. A single best time cannot predict a medley.</p>
+      <p class="copy">We are building a medley version. It will take your best 100 or 200 of each stroke, estimate your IM goal, give you a target split for each leg, and tell you which stroke is holding you back.</p>
   </div>
 
   <p class="foot">ROW Swim Club &middot; Goal times are a starting point, not a prediction. Your coach's target wins.</p>
@@ -438,26 +444,28 @@
       mathEl.appendChild(row(d+' m',[['Goal',v],['Built from', isPB?'Your best time':(r.w[d]||'')]]));
     });
 
-    var races=[{race:'100 m',goal:r[100],n:2,kick:0},
-               {race:'200 m',goal:r[200],n:4,kick:0}];
+    var races=[{race:'100 m',goal:r[100],n:2,drop:st.d100,kick:0},
+               {race:'200 m',goal:r[200],n:4,drop:st.d200,kick:0}];
     if(stroke==='fr'){
-      races.push({race:'400 m',goal:r[400][0],n:8,kick:KICK});
-      races.push({race:'800 m',goal:r[800][0],n:16,kick:KICK});
-      races.push({race:'1500 m',goal:r[1500][0],n:30,kick:KICK});
+      races.push({race:'400 m',goal:r[400][0],n:8,drop:3,kick:KICK});
+      races.push({race:'800 m',goal:r[800][0],n:16,drop:3,kick:KICK});
+      races.push({race:'1500 m',goal:r[1500][0],n:30,drop:3,kick:KICK});
     }
     splitsEl.innerHTML='';
     races.forEach(function(x){
-      // Even pace, with the closing kick taken off the final 50. Sums exactly to the goal.
-      var held=(x.goal + x.kick)/x.n, last=held - x.kick;
-      var txt = x.n===2 ? fmt(held)+' + '+fmt(held)
-        : (x.kick ? fmt(held)+' x '+(x.n-1)+' + '+fmt(last) : fmt(held)+' x '+x.n);
+      // First 50 is faster (dive and fresh), then hold, then kick home. Sums exactly to the goal.
+      var first=(x.goal-(x.n-1)*x.drop+x.kick)/x.n, held=first+x.drop, last=held-x.kick;
+      var txt = x.n===2 ? fmt(first)+' + '+fmt(held)
+        : (x.kick ? fmt(first)+' + '+fmt(held)+' x '+(x.n-2)+' + '+fmt(last)
+                  : fmt(first)+' + '+fmt(held)+' x '+(x.n-1));
       splitsEl.appendChild(row(x.race,[['Goal',fmt(x.goal)],['Target 50s',txt]]));
     });
 
-    dropEl.innerHTML='Nobody splits perfectly even, and some slowing is normal. Your drop-off is '+
-      'how much slower your second 50 is than your first. In '+st.name+' keep it to <strong>'+
-      st.d100.toFixed(1)+' seconds or less in a 100</strong> and <strong>'+st.d200.toFixed(1)+
-      ' seconds or less in a 200 or longer</strong>.'+
+    dropEl.innerHTML='Your drop-off is how much slower your second 50 is than your first. '+
+      'In '+st.name+' keep it to <strong>'+st.d100.toFixed(1)+
+      ' seconds or less in a 100</strong> and <strong>'+st.d200.toFixed(1)+
+      ' seconds or less in a 200 or longer</strong>. Breaststroke and butterfly drop more than '+
+      'freestyle and backstroke, so the target splits above change with your stroke.'+
       (stroke==='fr' ? '' : ' The 400, 800 and 1500 are freestyle only, so they are not shown above.');
 
     ladderEl.innerHTML='The 50, 100 and 200 goals are '+st.name+
