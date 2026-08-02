@@ -111,6 +111,13 @@
     margin-right:8px;color:var(--foam);}
   .b-ahead{background:var(--teal);} .b-phase{background:var(--navy);}
   .b-season{background:#7A5C1E;} .b-long{background:#5A5A5A;}
+  .b-anchor{background:var(--ink-soft);} .b-inside{background:var(--teal);}
+  .b-slow{background:var(--red);} .b-fast{background:var(--teal);} .b-bal{background:var(--navy);}
+  .modes{margin:0 0 18px;}
+  .modes button{flex:1 1 44%;}
+  .status{background:var(--navy);color:var(--foam);border-radius:10px;padding:10px 16px;
+    margin:0 0 16px;font-family:var(--mono);font-size:12px;font-weight:700;
+    letter-spacing:0.1em;text-transform:uppercase;}
 
   .note{border-left:4px solid var(--cyan);background:#EFFAF8;border-radius:0 10px 10px 0;
     padding:14px 16px;margin:16px 0 0;font-size:14px;line-height:1.6;}
@@ -164,6 +171,13 @@
     <i style="background:var(--red)"></i><i style="background:var(--foam)"></i>
   </div>
 
+  <div class="picker modes" role="group" aria-label="Which tool">
+    <button type="button" data-mode="single" aria-pressed="true">One stroke</button>
+    <button type="button" data-mode="medley" aria-pressed="false">Medley</button>
+  </div>
+
+  <div id="mode-single">
+
   <div class="card">
     <h2>Your best time</h2>
 
@@ -215,7 +229,7 @@
 
     <div class="card">
       <h2>Your target splits</h2>
-      <p class="copy"><strong>Your first 50 is always the fastest.</strong> You dive in and you are fresh, so it comes for free. After that, hold the same time on every 50. In a 400 or longer, bring the last 50 home about a second faster.</p>
+      <p class="copy"><strong>Your first 50 is always the fastest.</strong> You dive in and you are fresh, so it comes for free. After that, hold the same time on every 50. Then bring the last 50 home faster: about 0.6 seconds in a 400, and about a second in an 800 or 1500.</p>
       <ul class="dl" id="splits"></ul>
       <p class="hint">Rounded to a tenth, so they may add up a few tenths either side of your goal. Swim the numbers, not the total.</p>
       <h3>The drop-off, checked after the race</h3>
@@ -264,11 +278,77 @@
 
   </div>
 
-  <div class="card" style="margin-top:4px;">
-      <h2>Coming soon: the medley</h2>
-      <p class="copy">This tool covers one stroke at a time. The <strong>200 IM</strong> and <strong>400 IM</strong> work differently, because your time depends on all four strokes rather than one. A single best time cannot predict a medley.</p>
-      <p class="copy">We are building a medley version. It will take your best 100 or 200 of each stroke, estimate your IM goal, give you a target split for each leg, and tell you which stroke is holding you back.</p>
-  </div>
+  </div><!-- /mode-single -->
+
+  <div id="mode-medley" hidden>
+
+    <div class="status">In development &mdash; testing mode</div>
+
+    <div class="card">
+      <h2>Your four best times</h2>
+      <p class="copy">A medley time is set by the stroke you are worst at, so one best time cannot predict it. This mode needs all four.</p>
+
+      <span class="lbl" id="im-label">Which medley?</span>
+      <div class="picker" role="group" aria-labelledby="im-label">
+        <button type="button" data-im="200" aria-pressed="true">200 IM</button>
+        <button type="button" data-im="400" aria-pressed="false">400 IM</button>
+      </div>
+      <p class="hint" id="im-note" style="margin:-12px 0 18px;"></p>
+
+      <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden;" id="im-inputs"></div>
+
+      <div id="im-cross-wrap" style="display:none;margin-top:18px;">
+        <span class="lbl">Your best 200 IM <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional, for a second opinion)</span></span>
+        <div class="timebox">
+          <div class="fld">
+            <input type="text" id="im-x-min" inputmode="numeric" autocomplete="off" maxlength="2" placeholder="2" aria-label="200 IM minutes">
+            <div class="sublbl">Min</div>
+          </div>
+          <div class="colon">:</div>
+          <div class="fld">
+            <input type="text" id="im-x-sec" inputmode="decimal" autocomplete="off" maxlength="5" placeholder="30.00" aria-label="200 IM seconds">
+            <div class="sublbl">Sec</div>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="ghost" id="im-example">Load Noor's example</button>
+      <p class="hint">Never raced one of them? Go and race it. You cannot estimate a medley from a stroke you have not swum.</p>
+      <div class="err" id="im-err" role="alert"></div>
+    </div>
+
+    <div id="im-results" hidden>
+
+      <div class="card">
+        <h2>Your medley goal</h2>
+        <div class="grid" id="im-tiles"></div>
+        <p class="hint" id="im-goal-note"></p>
+        <div class="note" id="im-cross-note" style="display:none;"></div>
+        <div class="note warn">A medley goal is looser than a single-stroke goal, because it is built from four races instead of one. Aim inside the range rather than at one number.</div>
+      </div>
+
+      <div class="card">
+        <h2>Your leg targets</h2>
+        <p class="copy">What each leg should take if you swim your goal time.</p>
+        <ul class="dl" id="im-legs"></ul>
+        <div class="note">Breaststroke takes the biggest share because it is the slowest stroke, not because the race is won there.</div>
+      </div>
+
+      <div class="card">
+        <h2>Which stroke is holding you back?</h2>
+        <p class="copy">This compares each stroke against your own four-stroke total, so it does not matter how fast you are overall. A bigger share than the benchmark means that stroke is slow <em>for you</em>.</p>
+        <ul class="dl" id="im-balance"></ul>
+        <div class="note" id="im-balance-note"></div>
+      </div>
+
+      <div class="card">
+        <h2>Show the math</h2>
+        <ul class="dl" id="im-math"></ul>
+        <div class="note">The estimate adds your four times and halves them, then adds a little for the turns and for the work of swimming all four back to back.</div>
+      </div>
+
+    </div>
+  </div><!-- /mode-medley -->
 
   <p class="foot">ROW Swim Club &middot; Goal times are a starting point, not a prediction. Your coach's target wins.</p>
 </div>
@@ -276,7 +356,12 @@
 <script>
 (function(){
   var best = 50, stroke = 'fr';
-  var KICK = 1.0;
+  // Closing kick, checked against 18&U race splits Aug 2026. The 400 comes home about
+  // 0.6s faster on the last 50; the 800 and 1500 about 1.0s.
+  var KICK_400 = 0.6, KICK_LONG = 1.0;
+  // Absorbs the hundredth-of-a-second in an entered time, so a swimmer re-entering
+  // their own best time is never told they beat it.
+  var TOL = 0.005;
   var DISTS = [50,100,200,400,800,1500];
   var STROKES = {
     fr:{name:'freestyle', short:'free', d100:2, d200:3},
@@ -285,7 +370,7 @@
     fl:{name:'butterfly', short:'fly', d100:4, d200:4}
   };
   var PH = {50:{m:'0',s:'30.00'}, 100:{m:'1',s:'05.00'}, 200:{m:'2',s:'20.00'},
-            400:{m:'4',s:'52.50'}, 800:{m:'10',s:'02.50'}, 1500:{m:'19',s:'30.00'}};
+            400:{m:'4',s:'52.50'}, 800:{m:'10',s:'10.00'}, 1500:{m:'19',s:'30.00'}};
 
   var minsEl=document.getElementById('mins'), secsEl=document.getElementById('secs');
   var errEl=document.getElementById('err'), resultsEl=document.getElementById('results');
@@ -336,7 +421,7 @@
     } else if(best===400){
       g200=(pb-12.5)/2; w[200]='('+fmtPB(pb)+' - 12.5) / 2'; down200(g200);
     } else if(best===800){
-      var b4=(pb-17.5)/2; w[400]='('+fmtPB(pb)+' - 17.5) / 2';
+      var b4=(pb-27.5)/2; w[400]='('+fmtPB(pb)+' - 27.5) / 2';
       g200=(b4-12.5)/2; w[200]='('+fmt(b4)+' - 12.5) / 2'; down200(g200);
       g400=[b4,b4];
     } else {
@@ -348,19 +433,31 @@
       if(best===400){ g400=[pb,pb]; w[400]='Your best time'; }
       else { g400=[g200*2+10, g200*2+15]; w[400]=fmt(g200)+' x 2 + 10 to 15'; }
     }
+    // Build from the MIDDLE of the 400 range, never from its ends. Feeding a range
+    // forward makes each range wider than the last; the 1500 came out 20 seconds wide.
+    var mid400=(g400[0]+g400[1])/2;
     if(best===800){ g800=[pb,pb]; w[800]='Your best time'; }
-    else { g800=[g400[0]*2+15, g400[1]*2+20]; w[800]=fmt(g400[0])+' x 2 + 15 to 20'; }
+    else { g800=[mid400*2+25, mid400*2+30]; w[800]=fmt(mid400)+' x 2 + 25 to 30'; }
     if(best===1500){ g1500=[pb,pb]; w[1500]='Your best time'; }
-    else { g1500=[g400[0]*4, g400[1]*4]; w[1500]=fmt(g400[0])+' x 4'; }
+    else { g1500=[mid400*4, mid400*4]; w[1500]=fmt(mid400)+' x 4'; }
     return {50:g50,100:g100,200:g200,400:g400,800:g800,1500:g1500,w:w};
   }
 
   function goalOf(r,d){ return d<=200 ? r[d] : r[d][0]; }
 
-  function band(actual, goal){
+  // goal is the number to chase. For 400 and longer that is the fast end of the range,
+  // and span carries the whole range, so a swimmer already inside it is told so.
+  function band(actual, goal, isAnchor, span){
+    if(isAnchor) return {k:'b-anchor', t:'Your starting point',
+      d:'This is the time you entered. Every goal on this page is built from it.'};
     var gap = actual - goal;
-    if(gap <= 0) return {k:'b-ahead', t:'Ahead of the ladder',
-      d:'You are already faster than this goal. Rebuild the ladder from this event.'};
+    if(gap < -TOL) return {k:'b-ahead', t:'Ahead of the ladder',
+      d:'You are '+fmt(-gap)+' seconds faster than this goal. This event is your real strength, so rebuild the ladder from it.'};
+    if(span && span[1]-span[0] > TOL && actual <= span[1]+TOL)
+      return {k:'b-inside', t:'Inside your goal range',
+        d:'You are already inside this range. The fast end, '+fmt(span[0])+', is the one to chase.'};
+    if(gap <= TOL) return {k:'b-phase', t:'On your goal',
+      d:'You are on this goal now. Time to set a new one.'};
     var pct = gap/goal*100;
     if(pct <= 2) return {k:'b-phase', t:'Next phase',
       d:fmt(gap)+' away, about '+pct.toFixed(1)+'%. Reachable in one training block.'};
@@ -400,7 +497,7 @@
         var t=readPair(ins[0],ins[1]);
         if(t===null || isNaN(t)){ vEl.className='verdict'; delete actuals[d]; updateAnchor(r); return; }
         actuals[d]=t;
-        var b=band(t,goal);
+        var b=band(t, goal, d===best, d>200 ? r[d] : null);
         vEl.className='verdict on';
         vEl.innerHTML='<span class="badge '+b.k+'">'+b.t+'</span>'+b.d;
         updateAnchor(r);
@@ -416,7 +513,7 @@
     var ahead=[];
     Object.keys(actuals).forEach(function(k){
       var d=parseInt(k,10);
-      if(actuals[d] < goalOf(r,d) - 0.005 && d!==best) ahead.push(d);
+      if(actuals[d] < goalOf(r,d) - TOL && d!==best) ahead.push(d);
     });
     if(!ahead.length){ anchorEl.style.display='none'; return; }
     anchorEl.style.display='block';
@@ -447,9 +544,9 @@
     var races=[{race:'100 m',goal:r[100],n:2,drop:st.d100,kick:0},
                {race:'200 m',goal:r[200],n:4,drop:st.d200,kick:0}];
     if(stroke==='fr'){
-      races.push({race:'400 m',goal:r[400][0],n:8,drop:3,kick:KICK});
-      races.push({race:'800 m',goal:r[800][0],n:16,drop:3,kick:KICK});
-      races.push({race:'1500 m',goal:r[1500][0],n:30,drop:3,kick:KICK});
+      races.push({race:'400 m',goal:r[400][0],n:8,drop:3,kick:KICK_400});
+      races.push({race:'800 m',goal:r[800][0],n:16,drop:3,kick:KICK_LONG});
+      races.push({race:'1500 m',goal:r[1500][0],n:30,drop:3,kick:KICK_LONG});
     }
     splitsEl.innerHTML='';
     races.forEach(function(x){
@@ -533,6 +630,191 @@
   });
 
   setLabels();
+
+  // ============================ MEDLEY MODE ============================
+  // Two benchmark tables, and they are NOT interchangeable.
+  //   legShare  = share of the IM taken by each leg. Used for leg targets.
+  //   flatShare = share of a swimmer's four FLAT times taken by each stroke. Used for
+  //               the balance read, because that is what the inputs are.
+  // A flat butterfly takes about 2.5 points more share than a butterfly IM leg does
+  // (6 of 6 swimmers checked). Using the leg table on flat times would tell almost
+  // every swimmer their butterfly is their weakness.
+  var IM_ORDER = ['fl','bk','br','fr'];
+  var IM_NAME = {fl:'Butterfly', bk:'Backstroke', br:'Breaststroke', fr:'Freestyle'};
+  var IM_CFG = {
+    200: { leg:100, legLen:50, lo:6.5, hi:8.5,
+           legShare:{fl:0.2178, bk:0.2538, br:0.2913, fr:0.2371},
+           flatShare:{fl:0.2448, bk:0.2465, br:0.2811, fr:0.2276} },
+    400: { leg:200, legLen:100, lo:5, hi:10,
+           legShare:{fl:0.2284, bk:0.2567, br:0.2849, fr:0.2300},
+           flatShare:{fl:0.2512, bk:0.2452, br:0.2827, fr:0.2209} }
+  };
+  var IM_CROSS = [20, 25];   // 400 IM = 200 IM x 2 + this
+  var BAL_BAND = 0.4;        // percentage points either side of the benchmark
+  var imTarget = 200, imVals = {}, imFields = {};
+
+  var imInputsEl=document.getElementById('im-inputs'), imErrEl=document.getElementById('im-err');
+  var imResultsEl=document.getElementById('im-results'), imTilesEl=document.getElementById('im-tiles');
+  var imLegsEl=document.getElementById('im-legs'), imBalEl=document.getElementById('im-balance');
+  var imMathEl=document.getElementById('im-math'), imNoteEl=document.getElementById('im-note');
+  var imGoalNoteEl=document.getElementById('im-goal-note'), imBalNoteEl=document.getElementById('im-balance-note');
+  var imCrossWrap=document.getElementById('im-cross-wrap'), imCrossNote=document.getElementById('im-cross-note');
+  var imXMin=document.getElementById('im-x-min'), imXSec=document.getElementById('im-x-sec');
+
+  function buildImInputs(){
+    var cfg=IM_CFG[imTarget];
+    imInputsEl.innerHTML=''; imFields={};
+    IM_ORDER.forEach(function(k){
+      var div=document.createElement('div');
+      div.className='vrow';
+      div.innerHTML =
+        '<div class="vhead"><span class="vdist">'+IM_NAME[k]+'</span>'+
+        '<span class="vgoal">Best '+cfg.leg+' m</span></div>'+
+        '<div class="vin"><span class="cap">My PB</span>'+
+        '<input type="text" inputmode="numeric" maxlength="2" placeholder="1" aria-label="'+IM_NAME[k]+' minutes">'+
+        '<span class="colon">:</span>'+
+        '<input type="text" inputmode="decimal" maxlength="5" placeholder="00.00" aria-label="'+IM_NAME[k]+' seconds">'+
+        '</div>';
+      var ins=div.querySelectorAll('input');
+      imFields[k]=ins;
+      ins[0].addEventListener('input',imUpdate);
+      ins[1].addEventListener('input',imUpdate);
+      imInputsEl.appendChild(div);
+    });
+    imNoteEl.textContent = imTarget===200
+      ? 'The 200 IM is built from your best 100 of each stroke.'
+      : 'The 400 IM is built from your best 200 of each stroke.';
+    imCrossWrap.style.display = imTarget===400 ? 'block' : 'none';
+  }
+
+  function imFail(msg){ imErrEl.className='err on'; imErrEl.textContent=msg; imResultsEl.hidden=true; }
+
+  function imUpdate(){
+    var cfg=IM_CFG[imTarget], vals={}, missing=[], bad=false, any=false;
+    IM_ORDER.forEach(function(k){
+      var t=readPair(imFields[k][0], imFields[k][1]);
+      if(t===null){ missing.push(IM_NAME[k]); return; }
+      any=true;
+      if(isNaN(t)){ bad=true; return; }
+      vals[k]=t;
+    });
+    if(!any){ imErrEl.className='err'; imResultsEl.hidden=true; return; }
+    if(bad) return imFail('One of those times did not read correctly. Whole minutes on the left, seconds on the right, like 1 and 10.50.');
+    if(missing.length) return imFail('Still need your best '+cfg.leg+' m '+
+      missing.join(', ').replace(/, ([^,]*)$/,' and $1').toLowerCase()+
+      '. A medley cannot be estimated from strokes you have not raced.');
+    imErrEl.className='err';
+    imVals=vals;
+    renderIm();
+  }
+
+  function renderIm(){
+    var cfg=IM_CFG[imTarget];
+    var sum=IM_ORDER.reduce(function(a,k){ return a+imVals[k]; },0);
+    var half=sum/2, lo=half+cfg.lo, hi=half+cfg.hi, mid=(lo+hi)/2;
+
+    imTilesEl.innerHTML=
+      '<div class="tile pb"><div class="k">Goal '+imTarget+' IM</div>'+
+      '<div class="v">'+fmt(lo)+' to '+fmt(hi)+'</div>'+
+      '<div class="sub">From your four '+cfg.leg+'s</div></div>'+
+      '<div class="tile"><div class="k">Middle</div><div class="v">'+fmt(mid)+'</div>'+
+      '<div class="sub">Aim here</div></div>';
+    imGoalNoteEl.textContent='Add your four '+cfg.leg+' times, halve the total, then add '+
+      cfg.lo+' to '+cfg.hi+' seconds.';
+
+    // optional cross-check, 400 only
+    var x=(imTarget===400) ? readPair(imXMin, imXSec) : null;
+    if(imTarget===400 && x!==null && !isNaN(x)){
+      var cl=x*2+IM_CROSS[0], ch=x*2+IM_CROSS[1];
+      var agree=(ch>=lo-0.001 && cl<=hi+0.001);
+      imCrossNote.style.display='block';
+      imCrossNote.innerHTML='<strong>Second opinion, from your 200 IM.</strong> Doubling it and adding '+
+        IM_CROSS[0]+' to '+IM_CROSS[1]+' gives <strong>'+fmt(cl)+' to '+fmt(ch)+'</strong>. '+
+        (agree ? 'That overlaps the estimate above, so the two agree.'
+               : 'That does not overlap the estimate above. Trust the four-stroke estimate, and treat the gap as a sign your 200 IM and your 400 IM are at different stages.');
+    } else { imCrossNote.style.display='none'; }
+
+    // leg targets
+    imLegsEl.innerHTML='';
+    IM_ORDER.forEach(function(k){
+      imLegsEl.appendChild(row(IM_NAME[k], [
+        ['Target '+cfg.legLen, fmt(mid*cfg.legShare[k])],
+        ['Share', (cfg.legShare[k]*100).toFixed(1)+'%']
+      ]));
+    });
+
+    // balance read, against the FLAT benchmark
+    imBalEl.innerHTML='';
+    var slow=[];
+    IM_ORDER.forEach(function(k){
+      var mine=imVals[k]/sum*100, bench=cfg.flatShare[k]*100, diff=mine-bench, b;
+      if(diff>BAL_BAND){ b={k:'b-slow', t:'Relatively slow'}; slow.push(IM_NAME[k]); }
+      else if(diff<-BAL_BAND){ b={k:'b-fast', t:'Relatively fast'}; }
+      else { b={k:'b-bal', t:'Balanced'}; }
+      var li=document.createElement('li');
+      li.innerHTML='<div class="rowhead">'+IM_NAME[k]+'</div>'+
+        '<div class="pair"><span class="pk">Your share</span><span class="pv">'+mine.toFixed(2)+'%</span></div>'+
+        '<div class="pair"><span class="pk">Benchmark</span><span class="pv">'+bench.toFixed(2)+'%</span></div>'+
+        '<div class="verdict on"><span class="badge '+b.k+'">'+b.t+'</span>'+
+        (diff>=0?'+':'')+diff.toFixed(2)+' points against the benchmark.</div>';
+      imBalEl.appendChild(li);
+    });
+
+    var keyStroke=slow.filter(function(s){ return s==='Backstroke'||s==='Breaststroke'; });
+    imBalNoteEl.innerHTML = !slow.length
+      ? '<strong>Your four strokes are balanced.</strong> No single stroke is holding the medley back, so the way forward is to get faster everywhere rather than to fix one leg.'
+      : (keyStroke.length
+        ? '<strong>Start with '+keyStroke.join(' and ')+'.</strong> Across 1,095 elite swimmers, backstroke and breaststroke moved medley results the most and butterfly the least. That is the opposite of how it feels, because butterfly comes first and hurts most.'
+        : '<strong>'+slow.join(' and ')+' reads slow, but do not start there.</strong> Across 1,095 elite swimmers, backstroke and breaststroke moved medley results the most and butterfly the least. Butterfly hurts most and matters least, so keep it honest rather than making it the project.');
+
+    // math
+    imMathEl.innerHTML='';
+    imMathEl.appendChild(row('Add your four '+cfg.leg+'s', [['Total', fmt(sum)]]));
+    imMathEl.appendChild(row('Halve it', [['Half', fmt(half)]]));
+    imMathEl.appendChild(row('Add '+cfg.lo+' to '+cfg.hi, [['Goal', fmt(lo)+' to '+fmt(hi)]]));
+    IM_ORDER.forEach(function(k){
+      imMathEl.appendChild(row(IM_NAME[k]+' leg', [
+        ['Middle x '+(cfg.legShare[k]*100).toFixed(2)+'%', fmt(mid*cfg.legShare[k])]]));
+    });
+
+    imResultsEl.hidden=false;
+  }
+
+  document.querySelectorAll('.modes button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.modes button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true');
+      var m=b.getAttribute('data-mode');
+      document.getElementById('mode-single').hidden = (m!=='single');
+      document.getElementById('mode-medley').hidden = (m!=='medley');
+    });
+  });
+
+  document.querySelectorAll('.picker button[data-im]').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.picker button[data-im]').forEach(function(x){x.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true');
+      imTarget=parseInt(b.getAttribute('data-im'),10);
+      buildImInputs();
+      imErrEl.className='err'; imResultsEl.hidden=true;
+    });
+  });
+
+  imXMin.addEventListener('input',imUpdate);
+  imXSec.addEventListener('input',imUpdate);
+
+  document.getElementById('im-example').addEventListener('click',function(){
+    document.querySelectorAll('.picker button[data-im]').forEach(function(x){
+      x.setAttribute('aria-pressed', x.getAttribute('data-im')==='200'?'true':'false'); });
+    imTarget=200; buildImInputs();
+    var ex={fl:['1','10.00'], bk:['1','12.00'], br:['1','20.00'], fr:['1','04.00']};
+    IM_ORDER.forEach(function(k){
+      imFields[k][0].value=ex[k][0]; imFields[k][1].value=ex[k][1];
+    });
+    imUpdate();
+  });
+
+  buildImInputs();
 })();
 </script>
 </body>
