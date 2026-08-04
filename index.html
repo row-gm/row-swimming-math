@@ -588,7 +588,20 @@
   }
 
   function setLabels(){
-    var distance = best>=400;
+    var longOnly = stroke !== 'fr'; // backstroke, breast, fly cannot race 400+
+    // If the selected distance is not available for this stroke, step back to 200.
+    if(longOnly && best >= 400){
+      best = 200;
+      distBtns.forEach(function(x){
+        x.setAttribute('aria-pressed', x.getAttribute('data-dist')==='200' ? 'true' : 'false');
+      });
+    }
+    // Disable long-distance buttons when a non-freestyle stroke is selected.
+    distBtns.forEach(function(b){
+      var d = parseInt(b.getAttribute('data-dist'), 10);
+      b.disabled = longOnly && d >= 400;
+    });
+    var distance = best>=400; // recompute after possible reset
     strokeBtns.forEach(function(b){
       var isFree = b.getAttribute('data-stroke')==='fr';
       b.disabled = distance && !isFree;
@@ -597,7 +610,7 @@
     if(distance) stroke='fr';
     strokeNoteEl.textContent = distance
       ? 'The 400, 800 and 1500 are freestyle events, so stroke is fixed here.'
-      : '';
+      : (longOnly ? 'The 400, 800 and 1500 are freestyle only and are not available for this stroke.' : '');
     pbDistEl.textContent='('+best+' m '+STROKES[stroke].short+')';
     minsEl.placeholder=PH[best].m; secsEl.placeholder=PH[best].s;
   }
