@@ -423,27 +423,26 @@
     } else if(best===800){
       var b4=(pb-27.5)/2; w[400]='('+fmtPB(pb)+' - 27.5) / 2';
       g200=(b4-12.5)/2; w[200]='('+fmt(b4)+' - 12.5) / 2'; down200(g200);
-      g400=[b4,b4];
+      g400=b4;
     } else {
       var c4=pb/4; w[400]=fmtPB(pb)+' / 4';
       g200=(c4-12.5)/2; w[200]='('+fmt(c4)+' - 12.5) / 2'; down200(g200);
-      g400=[c4,c4];
+      g400=c4;
     }
     if(!g400){
-      if(best===400){ g400=[pb,pb]; w[400]='Your best time'; }
-      else { g400=[g200*2+10, g200*2+15]; w[400]=fmt(g200)+' x 2 + 10 to 15'; }
+      if(best===400){ g400=pb; w[400]='Your best time'; }
+      else { g400=g200*2+12.5; w[400]=fmt(g200)+' x 2 + 12.5'; }
     }
-    // Build from the MIDDLE of the 400 range, never from its ends. Feeding a range
-    // forward makes each range wider than the last; the 1500 came out 20 seconds wide.
-    var mid400=(g400[0]+g400[1])/2;
-    if(best===800){ g800=[pb,pb]; w[800]='Your best time'; }
-    else { g800=[mid400*2+25, mid400*2+30]; w[800]=fmt(mid400)+' x 2 + 25 to 30'; }
-    if(best===1500){ g1500=[pb,pb]; w[1500]='Your best time'; }
-    else { g1500=[mid400*4, mid400*4]; w[1500]=fmt(mid400)+' x 4'; }
+    // Use the 400 goal directly as the base for 800 and 1500.
+    var mid400=g400;
+    if(best===800){ g800=pb; w[800]='Your best time'; }
+    else { g800=mid400*2+27.5; w[800]=fmt(mid400)+' x 2 + 27.5'; }
+    if(best===1500){ g1500=pb; w[1500]='Your best time'; }
+    else { g1500=mid400*4; w[1500]=fmt(mid400)+' x 4'; }
     return {50:g50,100:g100,200:g200,400:g400,800:g800,1500:g1500,w:w};
   }
 
-  function goalOf(r,d){ return d<=200 ? r[d] : r[d][0]; }
+  function goalOf(r,d){ return r[d]; }
 
   // goal is the number to chase. For 400 and longer that is the fast end of the range,
   // and span carries the whole range, so a swimmer already inside it is told so.
@@ -485,7 +484,7 @@
       div.className='vrow';
       div.innerHTML =
         '<div class="vhead"><span class="vdist">'+d+' m</span>'+
-        '<span class="vgoal">Goal '+(d<=200?fmt(goal):rng(r[d]))+'</span></div>'+
+        '<span class="vgoal">Goal '+fmt(goal)+'</span></div>'+
         '<div class="vin"><span class="cap">My PB</span>'+
         '<input type="text" inputmode="numeric" maxlength="2" placeholder="0" aria-label="'+d+' minutes">'+
         '<span class="colon">:</span>'+
@@ -497,7 +496,7 @@
         var t=readPair(ins[0],ins[1]);
         if(t===null || isNaN(t)){ vEl.className='verdict'; delete actuals[d]; updateAnchor(r); return; }
         actuals[d]=t;
-        var b=band(t, goal, d===best, d>200 ? r[d] : null);
+        var b=band(t, goal, d===best, null);
         vEl.className='verdict on';
         vEl.innerHTML='<span class="badge '+b.k+'">'+b.t+'</span>'+b.d;
         updateAnchor(r);
@@ -529,8 +528,9 @@
 
     tilesEl.innerHTML=''; mathEl.innerHTML='';
     DISTS.forEach(function(d){
+      if(d>200 && stroke!=='fr') return; // 400+ are freestyle events only
       var isPB=(d===best);
-      var v = d<=200 ? (isPB?fmtPB(r[d]):fmt(r[d])) : (isPB?fmtPB(r[d][0]):rng(r[d]));
+      var v = isPB ? fmtPB(r[d]) : fmt(r[d]);
       var sub = d<=200 ? cap : 'Freestyle';
       var tile=document.createElement('div');
       tile.className='tile'+(isPB?' pb':'');
@@ -544,9 +544,9 @@
     var races=[{race:'100 m',goal:r[100],n:2,drop:st.d100,kick:0},
                {race:'200 m',goal:r[200],n:4,drop:st.d200,kick:0}];
     if(stroke==='fr'){
-      races.push({race:'400 m',goal:r[400][0],n:8,drop:3,kick:KICK_400});
-      races.push({race:'800 m',goal:r[800][0],n:16,drop:3,kick:KICK_LONG});
-      races.push({race:'1500 m',goal:r[1500][0],n:30,drop:3,kick:KICK_LONG});
+      races.push({race:'400 m',goal:r[400],n:8,drop:3,kick:KICK_400});
+      races.push({race:'800 m',goal:r[800],n:16,drop:3,kick:KICK_LONG});
+      races.push({race:'1500 m',goal:r[1500],n:30,drop:3,kick:KICK_LONG});
     }
     splitsEl.innerHTML='';
     races.forEach(function(x){
