@@ -131,6 +131,14 @@
   .step p{margin:0;font-size:14.5px;line-height:1.6;}
   .foot{font-size:12.5px;color:var(--ink-soft);text-align:center;padding:6px 0 20px;line-height:1.6;}
 
+  /* PB summary banner at top of results */
+  #pb-banner{display:flex;gap:10px;margin-bottom:0;}
+  .pb-chip{flex:1;background:var(--navy);color:var(--foam);border-radius:12px;padding:16px;margin-bottom:16px;}
+  .pb-chip .k{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:0.1em;
+    text-transform:uppercase;color:#B9CCD0;margin-bottom:6px;}
+  .pb-chip .v{font-family:var(--display);font-size:22px;color:var(--foam);
+    line-height:1.2;word-break:break-word;}
+
   @media (min-width:700px){
     .wrap{padding:24px;}
     .hero{padding:44px 32px;} h1{font-size:34px;} .hero p{font-size:16px;} .eyebrow{font-size:13px;}
@@ -221,8 +229,11 @@
 
   <div id="results" hidden>
 
+    <!-- PB confirmation — populated by JS -->
+    <div id="pb-banner"></div>
+
     <div class="card">
-      <h2>Your goal ladder</h2>
+      <h2>Your goal times</h2>
       <div class="grid" id="tiles"></div>
       <p class="hint" id="ladder-note"></p>
     </div>
@@ -239,34 +250,35 @@
     </div>
 
     <div class="card">
-      <h2>How to approach your goals</h2>
+      <h2>Let&#39;s create some goals!</h2>
+      <p class="copy">Add your best times from your other events below. The tool tells you how close each goal is and which ones to chase first.</p>
 
+      <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:0;" id="versatility"></div>
+      <div class="note warn" id="anchor-note" style="display:none;"></div>
+
+      <h3 style="margin-top:24px;">How to read your results</h3>
       <div class="step">
         <span class="stepnum">1</span>
         <div>
-          <h3>Are you versatile?</h3>
-          <p>Add any other best times you have below. If one event is already faster than its goal, that event is your real strength and the whole ladder should be rebuilt from it. Big gaps in one direction tell you what to train.</p>
+          <h3>Is one event ahead?</h3>
+          <p>If you have already beaten a goal time, that event is your real strength. Rebuild the ladder from it and the whole picture shifts.</p>
         </div>
       </div>
       <div class="step">
         <span class="stepnum">2</span>
         <div>
-          <h3>Pick your next-phase goals</h3>
+          <h3>What is within reach this block?</h3>
           <p>Chase what is close. Anything within about 2% of your current time is reachable in one training block. Pick one or two, not six.</p>
         </div>
       </div>
       <div class="step">
         <span class="stepnum">3</span>
         <div>
-          <h3>Set one stretch goal</h3>
-          <p>Something within about 5% is a season target. Further out than that is a longer project, and it is fine to name it, but do not judge your season on it.</p>
+          <h3>What is your season goal?</h3>
+          <p>Something within about 5% is a season target. Further out than that, name it if you like — but judge your season on something closer.</p>
         </div>
       </div>
 
-      <h3>Add your other best times</h3>
-      <p class="copy" style="font-size:14px;color:var(--ink-soft);">Optional. Leave blank any event you have not raced.</p>
-      <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden;" id="versatility"></div>
-      <div class="note warn" id="anchor-note" style="display:none;"></div>
       <div class="note">The 2% and 5% bands are a starting point for the conversation, not a rule. Your coach knows your training, your stroke and your race plan, and their target wins.</div>
     </div>
 
@@ -379,6 +391,7 @@
   var dropEl=document.getElementById('drop-note'), ladderEl=document.getElementById('ladder-note');
   var pbDistEl=document.getElementById('pb-dist'), strokeNoteEl=document.getElementById('stroke-note');
   var versEl=document.getElementById('versatility'), anchorEl=document.getElementById('anchor-note');
+  var pbBannerEl=document.getElementById('pb-banner');
   var distBtns=document.querySelectorAll('.picker button[data-dist]');
   var strokeBtns=document.querySelectorAll('.picker button[data-stroke]');
   var actuals = {};
@@ -479,6 +492,7 @@
     versEl.innerHTML='';
     DISTS.forEach(function(d){
       if(d>200 && stroke!=='fr') return;
+      if(d===best) return; // PB is shown in the banner above, not here
       var goal = goalOf(r,d);
       var div=document.createElement('div');
       div.className='vrow';
@@ -526,19 +540,27 @@
     var r=ladder(pb), st=STROKES[stroke];
     var cap=st.name.charAt(0).toUpperCase()+st.name.slice(1);
 
+    // Populate PB confirmation banner
+    pbBannerEl.innerHTML=
+      '<div class="pb-chip"><div class="k">Your best event</div>'+
+      '<div class="v">'+best+' m '+cap+'</div></div>'+
+      '<div class="pb-chip"><div class="k">Your best time</div>'+
+      '<div class="v">'+fmtPB(pb)+'</div></div>';
+
     tilesEl.innerHTML=''; mathEl.innerHTML='';
     DISTS.forEach(function(d){
       if(d>200 && stroke!=='fr') return; // 400+ are freestyle events only
       var isPB=(d===best);
-      var v = isPB ? fmtPB(r[d]) : fmt(r[d]);
+      if(isPB) return; // PB is shown in the banner above — skip it from the goal grid
+      var v = fmt(r[d]);
       var sub = d<=200 ? cap : 'Freestyle';
       var tile=document.createElement('div');
-      tile.className='tile'+(isPB?' pb':'');
-      tile.innerHTML='<div class="k">'+(isPB?'Your '+d:'Goal '+d)+'</div>'+
+      tile.className='tile';
+      tile.innerHTML='<div class="k">Goal '+d+'</div>'+
                      '<div class="v">'+v+'</div>'+
-                     '<div class="sub">'+(isPB?'Starting point':sub)+'</div>';
+                     '<div class="sub">'+sub+'</div>';
       tilesEl.appendChild(tile);
-      mathEl.appendChild(row(d+' m',[['Goal',v],['Built from', isPB?'Your best time':(r.w[d]||'')]]));
+      mathEl.appendChild(row(d+' m',[['Goal',v],['Built from', r.w[d]||'']]));
     });
 
     var races=[{race:'100 m',goal:r[100],n:2,drop:st.d100,kick:0},
